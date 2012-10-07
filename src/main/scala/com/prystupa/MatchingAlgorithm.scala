@@ -23,4 +23,13 @@ trait MatchingAlgorithm {
    * @return
    */
   def canMatch(order1: Order, order2: Order) : Boolean
+
+
+  /**
+   * Creates matching unit given two order and notional
+   * @param order1
+   * @param order2
+   * @return
+   */
+  def createMatch(order1: Order, order2: Order, notional: Int) : MatchingUnit
 }

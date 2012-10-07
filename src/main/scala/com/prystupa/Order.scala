@@ -18,7 +18,7 @@ import OrderType._
  *
  * This class should be immutable
  */
-class Order(id:Int, price: BigDecimal, notional: Int, direction: Direction, instrument: String, orderType: OrderType) {
+class Order(val id:Int, val price: BigDecimal, val notional: Int, val direction: Direction, val instrument: String, val orderType: OrderType) {
 
 
 }
