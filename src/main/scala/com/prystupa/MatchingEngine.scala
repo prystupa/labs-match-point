@@ -17,8 +17,10 @@ class MatchingEngine(orderBook: OrderBook) {
       val bookBySymbol = orderBook.getBySymbol(firstMatchingUnit.order1.instrument.symbol)
       var matchingChain = MatchingChain.EMPTY_CHAIN.append(firstMatchingUnit)
       def dfsMatchHelper(matchingUnit: MatchingUnit, matchingChain: MatchingChain):MatchingResult = {
-        //If we reached end of chain, add to matching resule
+        //If we reached end of chain, add to matching result
+        var result = null;
         if (matchingUnit.order2 == firstMatchingUnit.order1) {
+
         //Else do dfs to find match
         } else {
           //Find all matches for order1
@@ -37,6 +39,7 @@ class MatchingEngine(orderBook: OrderBook) {
             }
           }
         }
+        null
       }
       null
   }
