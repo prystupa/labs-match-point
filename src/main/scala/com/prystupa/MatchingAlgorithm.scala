@@ -20,16 +20,27 @@ trait MatchingAlgorithm {
    * Test if two orders can be matched based on matching algorithm
    * @param order1 - order to check for match
    * @param order2 - order to check for match
+   * @param matchingChain represents a chain of orders that have been matched up untils this point
    * @return
    */
-  def canMatch(order1: Order, order2: Order) : Boolean
+  def canMatch(order1: Order, order2: Order, matchingChain: MatchingChain) : Boolean
 
 
   /**
-   * Creates matching unit given two order and notional
-   * @param order1
-   * @param order2
-   * @return
+   * Creates a match given two order and notional
+   * @param order1 - first order
+   * @param order2 - second order
+   * @param notional - notional of order
+   * @return - returns constructed matching unit
    */
   def createMatch(order1: Order, order2: Order, notional: Int) : MatchingUnit
+
+  /**
+   * Creates swap
+   * @param order1 - first order
+   * @param order2 - second order
+   * @param notional - notional of order
+   * @return - returns constructed matching unit
+   */
+  def createSwap(order1: Order, order2: Order, notional: Int) : MatchingUnit
 }
