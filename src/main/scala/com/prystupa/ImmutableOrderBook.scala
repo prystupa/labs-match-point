@@ -11,24 +11,26 @@ import collection.mutable.{ArrayBuffer, ListBuffer}
  */
 class ImmutableOrderBook (val orders:Vector[Order]) extends OrderBook {
 
-	def getBySymbol(symbol: String): ImmutableOrderBook = {
+	def getBySymbol(symbol: String): OrderBook = {
 		new ImmutableOrderBook(orders.filter(order => order.instrument.symbol.equals(symbol)))
 	}
 
-	def getByParty(party: String): ImmutableOrderBook = {
+	def getByParty(party: String): OrderBook = {
 		new ImmutableOrderBook(orders.filter(order => order.party.equals(party)))
 	}
 
-	def getByTenor(tenor: String): ImmutableOrderBook = {
+	def getByTenor(tenor: String): OrderBook = {
 		new ImmutableOrderBook(orders.filter(order => order.instrument.tenor.equals(tenor)))
 	}
 
-	def getByDirection(direction: Direction.Direction): ImmutableOrderBook = {
+	def getByDirection(direction: Direction.Direction): OrderBook = {
 		new ImmutableOrderBook(orders.filter(order => order.direction == direction))
 	}
 
 	def getOrders = { orders }
 
-	def addOrder(order: Order) { orders :+ order }
+	def addOrder(order: Order): OrderBook = {
+		new ImmutableOrderBook(orders :+ order)
+	}
 
 }

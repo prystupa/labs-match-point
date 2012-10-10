@@ -2,6 +2,7 @@ package com.prystupa
 
 import Direction._
 import OrderType._
+import java.util.concurrent.atomic.AtomicInteger
 
 /**
  * Date: 10/7/12
@@ -24,4 +25,16 @@ class Order(val id:Int, val price: BigDecimal,
             val party: String ) {
 
 
+}
+
+object Order {
+	private val id = new AtomicInteger(0)
+
+	def create(direction: Direction)(party: String)(symbol: String, tenor: String, price:Int, notional: Int): Order = {
+		new Order(id.getAndIncrement, BigDecimal.apply(price), notional,
+			Direction.BUY, new Instrument(tenor, symbol), OrderType.ACTIVE, party)
+	}
+
+	val createBuy = create(Direction.BUY) _
+	val createSell = create(Direction.SELL) _
 }

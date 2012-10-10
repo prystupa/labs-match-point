@@ -17,5 +17,11 @@ trait OrderBook {
 
 	def getOrders: Vector[Order]
 
-	def addOrder(order: Order)
+	def addOrder(order: Order): OrderBook
+}
+
+object OrderBook {
+	def createImmutable: ImmutableOrderBook = {
+		new ImmutableOrderBook(Vector.empty)
+	}
 }

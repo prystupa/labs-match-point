@@ -12,8 +12,6 @@ import cucumber.runtime.PendingException
  */
 class RfqServiceSteps {
 
-  val matchingUnit = new MatchingUnit
-
   @Given("^market maker \"([^\"]*)\" quoted the following markets:$")
   def market_maker_quoted_the_following_markets(maker: String, table: DataTable) {
 
