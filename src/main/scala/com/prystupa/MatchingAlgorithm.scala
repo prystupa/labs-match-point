@@ -35,12 +35,23 @@ trait MatchingAlgorithm {
    */
   def createMatch(order1: Order, order2: Order, notional: Int) : MatchingUnit
 
+
   /**
-   * Creates swap
+   * Creates a swap given two order and notional
    * @param order1 - first order
    * @param order2 - second order
    * @param notional - notional of order
    * @return - returns constructed matching unit
    */
   def createSwap(order1: Order, order2: Order, notional: Int) : MatchingUnit
+
+
+  /**
+   * Returns all possible orders that can create a swap with the given order
+   * @param order - one leg of swap
+   * @param counterpartyOders - all counterparty orders
+   * @return returns a subset of orders that can be swap matches for a given order book
+   */
+  def getSwapMatches(order: Order, counterpartyOders: OrderBook) : OrderBook
+
 }

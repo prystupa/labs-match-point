@@ -12,5 +12,4 @@ trait OrderBook {
   def getByDirection(direction: Direction): OrderBook
   def findWithBestPrice(direction: Direction) : Order
   def getOrders : List[Order]
-
 }
