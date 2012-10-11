@@ -12,5 +12,7 @@ package com.prystupa
  */
 class MatchingUnit(val notional: Int, val order1: Order, val order2: Order) {
 
-
+	def flip():MatchingUnit = {
+		new MatchingUnit(notional, order2, order1)
+	}
 }

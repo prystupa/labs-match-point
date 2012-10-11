@@ -11,12 +11,13 @@ class SimpleMatchingAlgorithm extends MatchingAlgorithm {
 	def matchingCost(order1: Order, order2: Order): BigDecimal = { BigDecimal.apply(0) }
 
 	/**
-	 * Orders match of the same tenor, same instrument, different direction, same price
+	 * Orders match of the same tenor, same instrument, different direction, same price, different party
 	 */
-	def canMatch(order1: Order, order2: Order, matchingChain: MatchingChain) = {
+	def canMatch(order1: Order, order2: Order, matchingChain: MatchingChain):Boolean = {
 		order1.instrument.symbol.equals(order2.instrument.symbol) &&
 		order1.instrument.tenor.equals(order2.instrument.tenor) &&
 		order1.direction == Direction.reverse(order2.direction) &&
+		!order1.party.equals(order2.party) &&
 		order1.price.equals(order2.price)
 	}
 
@@ -27,7 +28,7 @@ class SimpleMatchingAlgorithm extends MatchingAlgorithm {
 	 * @param notional - notional of order
 	 * @return - returns constructed matching unit
 	 */
-	def createMatch(order1: Order, order2: Order, notional: Int) = {
+	def createMatch(order1: Order, order2: Order, notional: Int):MatchingUnit = {
 		new MatchingUnit(notional, order1, order2)
 	}
 
@@ -38,7 +39,7 @@ class SimpleMatchingAlgorithm extends MatchingAlgorithm {
 	 * @param notional - notional of order
 	 * @return - returns constructed matching unit
 	 */
-	def createSwap(order1: Order, order2: Order, notional: Int) = {
+	def createSwap(order1: Order, order2: Order, notional: Int):MatchingUnit = {
 		new MatchingUnit(notional, order1, order2)
 	}
 
@@ -49,10 +50,11 @@ class SimpleMatchingAlgorithm extends MatchingAlgorithm {
 	 * @param matchingChain represents a chain of orders that have been matched up untils this point
 	 * @return
 	 */
-	def canSwap(order1: Order, order2: Order, matchingChain: MatchingChain) {
+	def canSwap(order1: Order, order2: Order, matchingChain: MatchingChain):Boolean = {
 		order1.instrument.symbol.equals(order2.instrument.symbol) &&
 		order1.party.equals(order2.party) &&
 		order1.direction == Direction.reverse(order2.direction) &&
+		order1.party.equals(order2.party) &&
 		CalendarUtils.tenorAfter(order1.instrument.tenor, order2.instrument.tenor)
 	}
 }

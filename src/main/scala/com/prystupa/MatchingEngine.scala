@@ -41,7 +41,7 @@ class MatchingEngine(orderBook: OrderBook) {
 						//Find all outgoing orders for this counterparty with later tenor date
 						val counterpartyBook = bookBySymbol.getByParty(cpOrder1.party)
 						//Find all orders for order counterparty which satisfy algorithm
-						for (cpOrder2 <- counterpartyBook) {
+						for (cpOrder2 <- counterpartyBook.getOrders) {
 							if (matchingAlgorithm.canSwap(cpOrder1, cpOrder2, matchingChain)) {
 								//Create swap
 								val newSwap = matchingAlgorithm.createSwap(cpOrder1, cpOrder2, matchingUnit.notional)
@@ -54,7 +54,8 @@ class MatchingEngine(orderBook: OrderBook) {
 			}
 		}
 		//Call helper
-		dfsMatchHelper(originatingSwap, matchingChain)
+		//reverse for first order
+		dfsMatchHelper(originatingSwap.flip(), matchingChain)
 		//Return matching result
 		matchingResult
 	}
