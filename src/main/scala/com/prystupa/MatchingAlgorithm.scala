@@ -47,7 +47,7 @@ trait MatchingAlgorithm {
 
 
   /**
-   * Returns all possible orders that can create a swap with the given order
+   * Returns all possible orders that can createActive a swap with the given order
    * @param order - one leg of swap
    * @param counterpartyOders - all counterparty orders
    * @return returns a subset of orders that can be swap matches for a given order book

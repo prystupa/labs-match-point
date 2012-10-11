@@ -34,7 +34,7 @@ class MatchingEngine(orderBook: OrderBook) {
 				for (counterpartyOrder <- orders) {
 					//If we can match, order with next order
 					if (matchingAlgorithm.canMatch(order2, counterpartyOrder, matchingChain)) {
-						//We can match, create match
+						//We can match, createActive match
 						val matchingUnit = matchingAlgorithm.createMatch(order2, counterpartyOrder, swap.notional)
 						//Add to our chain
 						val chainAndTrade = matchingChain.append(matchingUnit)

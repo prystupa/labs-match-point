@@ -30,11 +30,11 @@ class Order(val id:Int, val price: BigDecimal,
 object Order {
 	private val id = new AtomicInteger(0)
 
-	def create(direction: Direction)(party: String)(symbol: String, tenor: String, price:Int, notional: Int): Order = {
+	def create(orderType: OrderType)(direction: Direction)(party: String)(symbol: String, tenor: String, price:Int, notional: Int): Order = {
 		new Order(id.getAndIncrement, BigDecimal.apply(price), notional,
-			Direction.BUY, new Instrument(tenor, symbol), OrderType.ACTIVE, party)
+			direction, new Instrument(tenor, symbol), orderType, party)
 	}
 
-	val createBuy = create(Direction.BUY) _
-	val createSell = create(Direction.SELL) _
+	val createActiveBuy = create(OrderType.ACTIVE)(Direction.BUY) _
+	val createActiveSell = create(OrderType.ACTIVE)(Direction.SELL) _
 }
