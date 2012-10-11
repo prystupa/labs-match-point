@@ -13,8 +13,11 @@ class SimpleMatchingAlgorithm extends MatchingAlgorithm {
 	/**
 	 * Orders match of the same tenor, same instrument, different direction, same price
 	 */
-	def canMatch(order1: Order, order2: Order, matchingChain: MatchingChain): Boolean = {
-		true
+	def canMatch(order1: Order, order2: Order, matchingChain: MatchingChain) = {
+		order1.instrument.symbol.equals(order2.instrument.symbol) &&
+		order1.instrument.tenor.equals(order2.instrument.tenor) &&
+		order1.direction == Direction.reverse(order2.direction) &&
+		order1.price.equals(order2.price)
 	}
 
 	/**
@@ -24,7 +27,9 @@ class SimpleMatchingAlgorithm extends MatchingAlgorithm {
 	 * @param notional - notional of order
 	 * @return - returns constructed matching unit
 	 */
-	def createMatch(order1: Order, order2: Order, notional: Int) = null
+	def createMatch(order1: Order, order2: Order, notional: Int) = {
+		new MatchingUnit(notional, order1, order2)
+	}
 
 	/**
 	 * Creates a swap given two order and notional
@@ -33,13 +38,21 @@ class SimpleMatchingAlgorithm extends MatchingAlgorithm {
 	 * @param notional - notional of order
 	 * @return - returns constructed matching unit
 	 */
-	def createSwap(order1: Order, order2: Order, notional: Int) = null
+	def createSwap(order1: Order, order2: Order, notional: Int) = {
+		new MatchingUnit(notional, order1, order2)
+	}
 
 	/**
-	 * Returns all possible orders that can createActive a swap with the given order
-	 * @param order - one leg of swap
-	 * @param counterpartyOders - all counterparty orders
-	 * @return returns a subset of orders that can be swap matches for a given order book
+	 * Test if two orders can create a swap
+	 * @param order1 - order to check
+	 * @param order2 - order to check
+	 * @param matchingChain represents a chain of orders that have been matched up untils this point
+	 * @return
 	 */
-	def getSwapMatches(order: Order, counterpartyOders: OrderBook) = null
+	def canSwap(order1: Order, order2: Order, matchingChain: MatchingChain) {
+		order1.instrument.symbol.equals(order2.instrument.symbol) &&
+		order1.party.equals(order2.party) &&
+		order1.direction == Direction.reverse(order2.direction) &&
+		CalendarUtils.tenorAfter(order1.instrument.tenor, order2.instrument.tenor)
+	}
 }

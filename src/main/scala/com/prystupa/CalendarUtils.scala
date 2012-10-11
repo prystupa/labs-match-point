@@ -6,20 +6,20 @@ package com.prystupa
  */
 object CalendarUtils {
   /**
-   * Checks if a particular instrument has tenor after other instrument
+   * Checks if a particular tenor after other tenor
    * This is a simplification, as it currently only works with days
    * And proper way would be to check for settlement date (value date)
-   * @param instrument1
-   * @param instrument2
+   * @param t1 - Tenor 1
+   * @param t2 - Tenor 2
    * @return
    */
-  def tenorAfter(instrument1: Instrument, instrument2: Instrument): Boolean = {
-    val tenor1: Int = extractTenorNumber(instrument1)
-    val tenor2: Int = extractTenorNumber(instrument1)
-    tenor2 > tenor1
+  def tenorAfter(t1: String, t2: String): Boolean = {
+    val tenor1: Int = extractTenorNumber(t1)
+    val tenor2: Int = extractTenorNumber(t2)
+    tenor1 > tenor2
   }
 
-  private def extractTenorNumber(instrument: Instrument):Int = {
-    augmentString(instrument.tenor.substring(0, instrument.tenor.length() - 1)).toInt
+  private def extractTenorNumber(t: String):Int = {
+    augmentString(t.substring(0, t.length() - 1)).toInt
   }
 }

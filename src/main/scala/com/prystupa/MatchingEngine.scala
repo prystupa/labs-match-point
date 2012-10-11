@@ -31,23 +31,23 @@ class MatchingEngine(orderBook: OrderBook) {
 				val bookByTenorAndDirection = bookByTenor.getByDirection(Direction.reverse(order2.direction))
 				//Iterate over all orders, check which orders can match
 				val orders = bookByTenorAndDirection.getOrders
-				for (counterpartyOrder <- orders) {
+				for (cpOrder1 <- orders) {
 					//If we can match, order with next order
-					if (matchingAlgorithm.canMatch(order2, counterpartyOrder, matchingChain)) {
+					if (matchingAlgorithm.canMatch(order2, cpOrder1, matchingChain)) {
 						//We can match, createActive match
-						val matchingUnit = matchingAlgorithm.createMatch(order2, counterpartyOrder, swap.notional)
+						val matchingUnit = matchingAlgorithm.createMatch(order2, cpOrder1, swap.notional)
 						//Add to our chain
 						val chainAndTrade = matchingChain.append(matchingUnit)
 						//Find all outgoing orders for this counterparty with later tenor date
-						val counterpartyBook = bookBySymbol.getByParty(counterpartyOrder.party)
+						val counterpartyBook = bookBySymbol.getByParty(cpOrder1.party)
 						//Find all orders for order counterparty which satisfy algorithm
-						val ordersValidForSwap = matchingAlgorithm.getSwapMatches(counterpartyOrder, counterpartyBook)
-						//and recurse down using order and this new order
-						for (orderValidForSwap <- ordersValidForSwap.getOrders) {
-							//Create swap
-							val newSwap = matchingAlgorithm.createSwap(counterpartyOrder, orderValidForSwap, matchingUnit.notional)
-							//traverse down
-							dfsMatchHelper(newSwap, matchingChain.append(newSwap))
+						for (cpOrder2 <- counterpartyBook) {
+							if (matchingAlgorithm.canSwap(cpOrder1, cpOrder2, matchingChain)) {
+								//Create swap
+								val newSwap = matchingAlgorithm.createSwap(cpOrder1, cpOrder2, matchingUnit.notional)
+								//traverse down
+								dfsMatchHelper(newSwap, chainAndTrade.append(newSwap))
+							}
 						}
 					}
 				}

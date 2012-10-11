@@ -6,52 +6,53 @@ package com.prystupa
  * Encapsulates matching algorithm
  */
 trait MatchingAlgorithm {
-  /**
-   * Encapsulates matching cost between two orders,
-   * Order chains can be ranked based on cost
-   * @param order1 - order to determine cost
-   * @param order2 - order to determine cost
-   * @return
-   */
-  def matchingCost(order1: Order, order2: Order) : BigDecimal
+	/**
+	 * Encapsulates matching cost between two orders,
+	 * Order chains can be ranked based on cost
+	 * @param order1 - order to determine cost
+	 * @param order2 - order to determine cost
+	 * @return
+	 */
+	def matchingCost(order1: Order, order2: Order): BigDecimal
 
 
-  /**
-   * Test if two orders can be matched based on matching algorithm
-   * @param order1 - order to check for match
-   * @param order2 - order to check for match
-   * @param matchingChain represents a chain of orders that have been matched up untils this point
-   * @return
-   */
-  def canMatch(order1: Order, order2: Order, matchingChain: MatchingChain) : Boolean
+	/**
+	 * Test if two orders can be matched based on matching algorithm
+	 * @param order1 - order to check for match
+	 * @param order2 - order to check for match
+	 * @param matchingChain represents a chain of orders that have been matched up untils this point
+	 * @return
+	 */
+	def canMatch(order1: Order, order2: Order, matchingChain: MatchingChain): Boolean
 
 
-  /**
-   * Creates a match given two order and notional
-   * @param order1 - first order
-   * @param order2 - second order
-   * @param notional - notional of order
-   * @return - returns constructed matching unit
-   */
-  def createMatch(order1: Order, order2: Order, notional: Int) : MatchingUnit
+	/**
+	 * Test if two orders can create a swap
+	 * @param order1 - order to check
+	 * @param order2 - order to check
+	 * @param matchingChain represents a chain of orders that have been matched up untils this point
+	 * @return
+	 */
+	def canSwap(order1: Order, order2: Order, matchingChain: MatchingChain): Boolean
 
 
-  /**
-   * Creates a swap given two order and notional
-   * @param order1 - first order
-   * @param order2 - second order
-   * @param notional - notional of order
-   * @return - returns constructed matching unit
-   */
-  def createSwap(order1: Order, order2: Order, notional: Int) : MatchingUnit
+	/**
+	 * Creates a match given two order and notional
+	 * @param order1 - first order
+	 * @param order2 - second order
+	 * @param notional - notional of order
+	 * @return - returns constructed matching unit
+	 */
+	def createMatch(order1: Order, order2: Order, notional: Int): MatchingUnit
 
 
-  /**
-   * Returns all possible orders that can createActive a swap with the given order
-   * @param order - one leg of swap
-   * @param counterpartyOders - all counterparty orders
-   * @return returns a subset of orders that can be swap matches for a given order book
-   */
-  def getSwapMatches(order: Order, counterpartyOders: OrderBook) : OrderBook
+	/**
+	 * Creates a swap given two order and notional
+	 * @param order1 - first order
+	 * @param order2 - second order
+	 * @param notional - notional of order
+	 * @return - returns constructed matching unit
+	 */
+	def createSwap(order1: Order, order2: Order, notional: Int): MatchingUnit
 
 }
