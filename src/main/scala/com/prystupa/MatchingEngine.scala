@@ -44,7 +44,7 @@ class MatchingEngine(orderBook: OrderBook) {
 						for (cpOrder2 <- counterpartyBook.getOrders) {
 							if (matchingAlgorithm.canSwap(cpOrder1, cpOrder2, matchingChain)) {
 								//Create swap
-								val newSwap = matchingAlgorithm.createSwap(cpOrder1, cpOrder2, matchingUnit.notional)
+								val newSwap = matchingAlgorithm.createSwap(cpOrder1, cpOrder2, Some(matchingUnit.notional))
 								//traverse down
 								dfsMatchHelper(newSwap, chainAndTrade.append(newSwap))
 							}
