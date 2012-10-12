@@ -35,7 +35,7 @@ class MatchingEngine(orderBook: OrderBook) {
 					//If we can match, order with next order
 					if (matchingAlgorithm.canMatch(order2, cpOrder1, matchingChain)) {
 						//We can match, createActive match
-						val matchingUnit = matchingAlgorithm.createMatch(order2, cpOrder1, swap.notional)
+						val matchingUnit = matchingAlgorithm.createMatch(order2, cpOrder1, Some(swap.notional))
 						//Add to our chain
 						val chainAndTrade = matchingChain.append(matchingUnit)
 						//Find all outgoing orders for this counterparty with later tenor date

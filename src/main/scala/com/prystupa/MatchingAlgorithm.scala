@@ -43,7 +43,7 @@ trait MatchingAlgorithm {
 	 * @param notional - notional of order
 	 * @return - returns constructed matching unit
 	 */
-	def createMatch(order1: Order, order2: Order, notional: Int): MatchingUnit
+	def createMatch(order1: Order, order2: Order, notional: Option[Int]): MatchingUnit
 
 
 	/**

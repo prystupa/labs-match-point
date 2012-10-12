@@ -28,8 +28,8 @@ class SimpleMatchingAlgorithm extends MatchingAlgorithm {
 	 * @param notional - notional of order
 	 * @return - returns constructed matching unit
 	 */
-	def createMatch(order1: Order, order2: Order, notional: Int):MatchingUnit = {
-		new MatchingUnit(notional, order1, order2)
+	def createMatch(order1: Order, order2: Order, notional: Option[Int]):MatchingUnit = {
+		new MatchingUnit(notional.getOrElse(math.min(order1.notional, order2.notional)), order1, order2)
 	}
 
 	/**
@@ -55,6 +55,6 @@ class SimpleMatchingAlgorithm extends MatchingAlgorithm {
 		order1.party.equals(order2.party) &&
 		order1.direction == Direction.reverse(order2.direction) &&
 		order1.party.equals(order2.party) &&
-		CalendarUtils.tenorAfter(order1.instrument.tenor, order2.instrument.tenor)
+		CalendarUtils.tenorAfter(order2.instrument.tenor, order1.instrument.tenor)
 	}
 }
