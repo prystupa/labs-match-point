@@ -38,7 +38,7 @@ class SimpleMatchingAlgorithmTest extends FunSuite with BeforeAndAfterAllFunctio
 		orderB3 = Order.createActiveBuy("B")("USDEUR", "5D", 5, 7)
 
 		book = newBook.addOrder(orderA1).addOrder(orderB1)
-		originalSwap = simpleMatchingAlgorithm.createSwap(orderB1, orderB2, 10)
+		originalSwap = simpleMatchingAlgorithm.createSwap(orderB1, orderB2, Some(10))
 		matchingChain =  MatchingChain.EMPTY_CHAIN.append(originalSwap)
 	}
 
@@ -50,7 +50,7 @@ class SimpleMatchingAlgorithmTest extends FunSuite with BeforeAndAfterAllFunctio
 		assert(!simpleMatchingAlgorithm.canMatch(orderB2, orderA2, matchingChain))
 	}
 
-	test("cannot match on different, price") {
+	test("cannot match on different price") {
 		assert(!simpleMatchingAlgorithm.canMatch(orderB2, orderA3, matchingChain))
 	}
 
@@ -66,11 +66,11 @@ class SimpleMatchingAlgorithmTest extends FunSuite with BeforeAndAfterAllFunctio
 		assert(simpleMatchingAlgorithm.canSwap(orderA2, orderA4, matchingChain))
 	}
 
-	test("can't swap older for younger tennor") {
+	test("can't swap same direction") {
 		assert(!simpleMatchingAlgorithm.canSwap(orderA2, orderA3, matchingChain))
 	}
 
-	test("can't swap same direction") {
+	test("can't swap older for younger tenor") {
 		assert(!simpleMatchingAlgorithm.canSwap(orderA4, orderA2, matchingChain))
 	}
 
@@ -84,6 +84,12 @@ class SimpleMatchingAlgorithmTest extends FunSuite with BeforeAndAfterAllFunctio
 
 	test("create match uses lowest notional") {
 		assert(simpleMatchingAlgorithm.createMatch(orderB2, orderA1, None).notional == 7)
+		assert(simpleMatchingAlgorithm.createMatch(orderB2, orderA1, Some(3)).notional == 3)
+	}
+
+	test("create swap uses lowest notional") {
+		assert(simpleMatchingAlgorithm.createSwap(orderA2, orderA4, None).notional == 7)
+		assert(simpleMatchingAlgorithm.createSwap(orderA2, orderA4, Some(3)).notional == 3)
 	}
 
 
