@@ -15,6 +15,12 @@ class MatchingUnit(val notional: Long, val order1: Order, val order2: Order) {
 	def flip():MatchingUnit = {
 		new MatchingUnit(notional, order2, order1)
 	}
+
+	def isSame(that:MatchingUnit) = {
+		that.notional == notional && ((that.order1.id == order1.id && that.order2.id == order2.id) ||
+			(that.order2.id == order1.id && that.order1.id == order2.id))
+	}
+
 }
 
 object MatchingUnit {

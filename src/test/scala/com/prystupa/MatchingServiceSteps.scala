@@ -24,7 +24,8 @@ class MatchingServiceSteps {
 
 	@Then("^no trades are generated$")
 	def no_trades_are_generated() {
-		System.out.println("No trades generated");
+		val matchingEngine = new MatchingEngine(orderBook)
+		val map:java.util.Map[Int, MatchingResult] = matchingEngine.createMatch()
 	}
 
 

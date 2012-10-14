@@ -12,5 +12,5 @@ import java.util
  * Time: 7:45 PM
  */
 class MatchingResult(val matchingChains: util.ArrayList[MatchingChain]) {
-
+	def isEmpty: Boolean = { matchingChains.isEmpty }
 }

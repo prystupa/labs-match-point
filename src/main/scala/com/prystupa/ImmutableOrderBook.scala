@@ -1,6 +1,7 @@
 package com.prystupa
 
 import collection.mutable.{ArrayBuffer, ListBuffer}
+import OrderType._
 
 /**
  * Date: 10/9/12
@@ -10,6 +11,10 @@ import collection.mutable.{ArrayBuffer, ListBuffer}
  * can be improved for performance/thread safety
  */
 class ImmutableOrderBook (val orders:Vector[LinkedOrder]) extends OrderBook {
+
+	def getByOrderType(orderType: OrderType): OrderBook = {
+		new ImmutableOrderBook(orders.filter(order => order.orderType == orderType))
+	}
 
 	def getBySymbol(symbol: String): OrderBook = {
 		new ImmutableOrderBook(orders.filter(order => order.instrument.symbol.equals(symbol)))

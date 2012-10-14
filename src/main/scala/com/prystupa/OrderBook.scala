@@ -1,12 +1,15 @@
 package com.prystupa
 
 import Direction._
+import OrderType._
 
 /**
  * Date: 10/7/12
  * Time: 9:12 PM
  */
 trait OrderBook {
+	def getByOrderType(orderType: OrderType) : OrderBook
+
 	def getBySymbol(symbol: String): OrderBook
 
 	def getByParty(party: String): OrderBook
