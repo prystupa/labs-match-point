@@ -63,7 +63,7 @@ class MatchingServiceSteps {
 			if (order1 == null) order1 = order
 			else order2 = order
 		}
-		val linkedOrder = LinkedOrder.apply(order1, order2)
+		val linkedOrder = LinkedOrder.link(order1, order2)
 		OrderBook.createImmutable.addOrder(linkedOrder)
 	}
 

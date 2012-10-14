@@ -20,10 +20,10 @@ class OrderBookTest extends FunSuite with BeforeAndAfterEach {
 		val newBook = OrderBook.createImmutable
 		val orderA1 = Order.createActiveBuy("A")("USDEUR", "5D", 5.toString, 10)
 		val orderA2 = Order.createActiveSell("A")("USDEUR", "6D", 5.toString, 10)
-		orderA = LinkedOrder.apply(orderA1, orderA2)
+		orderA = LinkedOrder.link(orderA1, orderA2)
 		val orderB1 = Order.createActiveSell("B")("USDCAD", "4D", 5.toString, 10)
 		val orderB2 = Order.createActiveBuy("B")("USDCAD", "5D", 5.toString, 10)
-		orderB = LinkedOrder.apply(orderB1, orderB2)
+		orderB = LinkedOrder.link(orderB1, orderB2)
 		book = newBook.addOrder(orderA).addOrder(orderB)
 	}
 
@@ -31,7 +31,7 @@ class OrderBookTest extends FunSuite with BeforeAndAfterEach {
 		val book = OrderBook.createImmutable
 		val orderA1 = Order.createActiveBuy("A")("USDEUR", "5D", 5.toString, 10)
 		val orderA2 = Order.createActiveSell("A")("USDEUR", "6D", 5.toString, 10)
-		val order = LinkedOrder.apply(orderA1, orderA2)
+		val order = LinkedOrder.link(orderA1, orderA2)
 		val newBook = book.addOrder(order)
 		assert(1 == newBook.getOrders.count(o => o.id == order.id))
 		assert(1 == newBook.getOrders.count(o => o.id == order.linkedOrder.id))
