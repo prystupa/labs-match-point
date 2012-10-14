@@ -23,6 +23,17 @@ class Order(val id:Int, val price: BigDecimal,
             val notional: Long, val direction: Direction,
             val instrument: Instrument, val orderType: OrderType,
             val party: String ) {
+	/**
+	 * Checks if given order has same economics as other order.
+	 * Comparison excludes orderType and id
+	 * @param that - order to compare to
+	 * @return
+	 */
+	def isSameEconomics(that:Order):Boolean = {
+   	    Order.isSameEconomics(this, that)
+	}
+
+
 }
 
 object Order {
@@ -31,6 +42,15 @@ object Order {
 	def create(orderType: OrderType)(direction: Direction)(party: String)(symbol: String, tenor: String, price:String, notional: Long): Order = {
 		new Order(id.getAndIncrement, BigDecimal.apply(price), notional,
 			direction, new Instrument(tenor, symbol), orderType, party)
+	}
+
+	def isSameEconomics(that: Order, thisOne: Order): Boolean = {
+		thisOne.price.equals(that.price) &&
+			thisOne.notional == that.notional &&
+			thisOne.direction == that.direction &&
+			thisOne.instrument.symbol.equals(that.instrument.symbol) &&
+			thisOne.instrument.tenor.equals(that.instrument.tenor) &&
+			thisOne.party.equals(that.party)
 	}
 
 	val createActiveBuy = create(OrderType.ACTIVE)(Direction.BUY) _

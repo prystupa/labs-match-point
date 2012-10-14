@@ -15,6 +15,26 @@ class LinkedOrder private (o:Order)
 
 	def linkedOrder:LinkedOrder = { order }
 	private def setLinkedOrder(linkedOrder: LinkedOrder) { this.order = linkedOrder }
+
+	/**
+	 * Checks if this order is the same as other linked order
+	 */
+
+	def isSame(that:LinkedOrder):Boolean = {
+		(that.id == id && that.linkedOrder.id == linkedOrder.id) ||
+		(that.id == linkedOrder.id && that.linkedOrder.id == id)
+	}
+
+	/**
+	 * Checks that economic attributes are the same
+	 * Economic attirubutes exclude id and type
+	 * @param that
+	 * @return
+	 */
+	def isSameEconomics(that:LinkedOrder):Boolean = {
+		(Order.isSameEconomics(this, that) && Order.isSameEconomics(that.linkedOrder, this.linkedOrder)) ||
+			(Order.isSameEconomics(this, that.linkedOrder) && Order.isSameEconomics(that.linkedOrder, this))
+	}
 }
 
 object LinkedOrder {

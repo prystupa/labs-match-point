@@ -21,6 +21,18 @@ class MatchingUnit(val notional: Long, val order1: Order, val order2: Order) {
 			(that.order2.id == order1.id && that.order1.id == order2.id))
 	}
 
+	/**
+	 * Check if 'that' matching unit represents same match
+	 * as this matching unit
+	 * @param that - other matching unit
+	 * @return
+	 */
+	def isSameEconomics(that:MatchingUnit):Boolean = {
+		notional == that.notional &&
+		((Order.isSameEconomics(order1, that.order1) && Order.isSameEconomics(order2, that.order2)) ||
+			(Order.isSameEconomics(order1, that.order2) && Order.isSameEconomics(order2, that.order1)))
+	}
+
 }
 
 object MatchingUnit {

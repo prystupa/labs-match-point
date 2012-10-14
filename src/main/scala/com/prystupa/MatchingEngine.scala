@@ -1,6 +1,7 @@
 package com.prystupa
 
 import java.util
+import collection._
 
 /**
  * Date: 10/7/12
@@ -10,9 +11,9 @@ class MatchingEngine(orderBook: OrderBook) {
 
 	val matchingAlgorithm = new SimpleMatchingAlgorithm
 
-	def createMatch(): util.Map[Int, MatchingResult] = {
+	def createMatch(): mutable.Map[Int, MatchingResult] = {
 		val activeBook = orderBook.getByOrderType(OrderType.ACTIVE)
-		val ret = new util.HashMap[Int, MatchingResult]()
+		val ret = mutable.HashMap.empty[Int, MatchingResult]
 		for (activeOrder <- activeBook.getOrders) {
 			ret.put(activeOrder.id, dfsMatch(matchingAlgorithm, activeOrder))
 		}
@@ -32,12 +33,10 @@ class MatchingEngine(orderBook: OrderBook) {
 		val matchingResult = new MatchingResult(new util.ArrayList())
 		def dfsMatchHelper(swap: LinkedOrder, matchingChain: MatchingChain) {
 			//If we reached end of chain, add to matching result
-			if (swap.id == originatingSwap.id) {
+			if (swap.isSame(originatingSwap) && !matchingChain.matchingUnits.isEmpty) {
 				matchingResult.matchingChains.add(matchingChain)
 				//Else do dfs to find match
 			} else {
-				//Append matching unit
-				val chainAndSwap = matchingChain.append(MatchingUnit.apply(swap))
 				//Find all matches for a matching unit leg
 				val orderToMatch = swap
 				val bookByTenor = bookBySymbol.getByTenor(orderToMatch.instrument.tenor)
@@ -50,9 +49,9 @@ class MatchingEngine(orderBook: OrderBook) {
 						//We can match, createActive match
 						val matchingUnit = matchingAlgorithm.createMatch(orderToMatch, cpOrder, Some(matchingChain.matchNotional))
 						//Add to our chain
-						val chainAndMatch = chainAndSwap.append(matchingUnit)
+						val chainAndMatch = matchingChain.append(matchingUnit)
 						//Traverse down
-						dfsMatchHelper(cpOrder, chainAndMatch)
+						dfsMatchHelper(cpOrder.linkedOrder, chainAndMatch)
 					}
 				}
 			}
