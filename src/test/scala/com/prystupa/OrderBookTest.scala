@@ -18,14 +18,14 @@ class OrderBookTest extends FunSuite with BeforeAndAfterEach {
 
 	override def beforeEach() {
 		val newBook = OrderBook.createImmutable
-		orderA = Order.createActiveBuy("A")("USDEUR", "5D", 5, 10)
-		orderB = Order.createActiveSell("B")("USDCAD", "4D", 5, 10)
+		orderA = Order.createActiveBuy("A")("USDEUR", "5D", 5.toString, 10)
+		orderB = Order.createActiveSell("B")("USDCAD", "4D", 5.toString, 10)
 		book = newBook.addOrder(orderA).addOrder(orderB)
 	}
 
 	test("add order") {
 		val book = OrderBook.createImmutable
-		val order = Order.createActiveBuy("A")("USDEUR", "5D", 5, 10)
+		val order = Order.createActiveBuy("A")("USDEUR", "5D", 5.toString, 10)
 		val newBook = book.addOrder(order)
 		assert(1 == newBook.getOrders.count(o => o.id == order.id))
 	}

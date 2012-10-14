@@ -18,6 +18,8 @@ trait OrderBook {
 	def getOrders: Vector[Order]
 
 	def addOrder(order: Order): OrderBook
+
+	def merge(orderBook : OrderBook) : OrderBook
 }
 
 object OrderBook {

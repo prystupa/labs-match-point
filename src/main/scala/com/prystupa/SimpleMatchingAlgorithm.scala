@@ -28,7 +28,7 @@ class SimpleMatchingAlgorithm extends MatchingAlgorithm {
 	 * @param notional - notional of order
 	 * @return - returns constructed matching unit
 	 */
-	def createMatch(order1: Order, order2: Order, notional: Option[Int]):MatchingUnit = {
+	def createMatch(order1: Order, order2: Order, notional: Option[Long]):MatchingUnit = {
 		val minOrder = math.min(order1.notional, order2.notional)
 		val existingNotional = notional.getOrElse(math.min(order1.notional, order2.notional))
 		new MatchingUnit(math.min(minOrder, existingNotional), order1, order2)
@@ -41,7 +41,7 @@ class SimpleMatchingAlgorithm extends MatchingAlgorithm {
 	 * @param notional - notional of order
 	 * @return - returns constructed matching unit
 	 */
-	def createSwap(order1: Order, order2: Order, notional: Option[Int]):MatchingUnit = {
+	def createSwap(order1: Order, order2: Order, notional: Option[Long]):MatchingUnit = {
 		val minOrder = math.min(order1.notional, order2.notional)
 		val existingNotional = notional.getOrElse(math.min(order1.notional, order2.notional))
 		new MatchingUnit(math.min(minOrder, existingNotional), order1, order2)

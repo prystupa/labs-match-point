@@ -27,6 +27,11 @@ class ImmutableOrderBook (val orders:Vector[Order]) extends OrderBook {
 		new ImmutableOrderBook(orders.filter(order => order.direction == direction))
 	}
 
+	def merge(orderBook: OrderBook) : OrderBook = {
+		new ImmutableOrderBook(orders ++ orderBook.getOrders)
+	}
+
+
 	def getOrders = { orders }
 
 	def addOrder(order: Order): OrderBook = {

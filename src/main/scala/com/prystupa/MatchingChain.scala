@@ -9,7 +9,7 @@ import collection.mutable.ListBuffer
  * Date: 10/7/12
  * Time: 5:07 PM
  */
-class MatchingChain(val matchingUnits: List[MatchingUnit], val matchNotional: Int) {
+class MatchingChain(val matchingUnits: List[MatchingUnit], val matchNotional: Long) {
 
 
   /**

@@ -27,15 +27,15 @@ class SimpleMatchingAlgorithmTest extends FunSuite with BeforeAndAfterAllFunctio
 	beforeAll {
 		simpleMatchingAlgorithm = new SimpleMatchingAlgorithm()
 		val newBook = OrderBook.createImmutable
-		orderA1 = Order.createActiveBuy("A")("USDEUR", "5D", 5, 7)
-		orderA2 = Order.createActiveBuy("A")("USDEUR", "3D", 1, 7)
-		orderA3 = Order.createActiveBuy("A")("USDEUR", "5D", 4, 7)
-		orderA4 = Order.createActiveSell("A")("USDEUR", "5D", 5, 10)
-		orderA5 = Order.createActiveSell("A")("USDCAD", "5D", 6, 10)
+		orderA1 = Order.createActiveBuy("A")("USDEUR", "5D", 5.toString, 7)
+		orderA2 = Order.createActiveBuy("A")("USDEUR", "3D", 1.toString, 7)
+		orderA3 = Order.createActiveBuy("A")("USDEUR", "5D", 4.toString, 7)
+		orderA4 = Order.createActiveSell("A")("USDEUR", "5D", 5.toString, 10)
+		orderA5 = Order.createActiveSell("A")("USDCAD", "5D", 6.toString, 10)
 
-		orderB1 = Order.createActiveBuy("B")("USDCAD", "4D", 3, 10)
-		orderB2 = Order.createActiveSell("B")("USDEUR", "5D", 5, 10)
-		orderB3 = Order.createActiveBuy("B")("USDEUR", "5D", 5, 7)
+		orderB1 = Order.createActiveBuy("B")("USDCAD", "4D", 3.toString, 10)
+		orderB2 = Order.createActiveSell("B")("USDEUR", "5D", 5.toString, 10)
+		orderB3 = Order.createActiveBuy("B")("USDEUR", "5D", 5.toString, 7)
 
 		book = newBook.addOrder(orderA1).addOrder(orderB1)
 		originalSwap = simpleMatchingAlgorithm.createSwap(orderB1, orderB2, Some(10))

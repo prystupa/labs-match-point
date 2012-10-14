@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger
  * This class should be immutable
  */
 class Order(val id:Int, val price: BigDecimal,
-            val notional: Int, val direction: Direction,
+            val notional: Long, val direction: Direction,
             val instrument: Instrument, val orderType: OrderType,
             val party: String ) {
 
@@ -30,7 +30,7 @@ class Order(val id:Int, val price: BigDecimal,
 object Order {
 	private val id = new AtomicInteger(0)
 
-	def create(orderType: OrderType)(direction: Direction)(party: String)(symbol: String, tenor: String, price:Int, notional: Int): Order = {
+	def create(orderType: OrderType)(direction: Direction)(party: String)(symbol: String, tenor: String, price:String, notional: Long): Order = {
 		new Order(id.getAndIncrement, BigDecimal.apply(price), notional,
 			direction, new Instrument(tenor, symbol), orderType, party)
 	}
