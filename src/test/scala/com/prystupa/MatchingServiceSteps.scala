@@ -39,8 +39,9 @@ class MatchingServiceSteps {
 	}
 
 	def createOrderBook(table: DataTable, orderType: OrderType, party:String):OrderBook = {
-		var orderBook:OrderBook = OrderBook.createImmutable
 		def isBuy(row: java.util.Map[String, String]):Boolean = row.get("Bid").length() > 0
+		var order1:Order = null
+		var order2:Order = null
 		for(row <- table.asMaps().iterator) {
 			var priceKey = ""
 			var notionalKey = ""
@@ -59,9 +60,11 @@ class MatchingServiceSteps {
 			val notional = augmentString(row.get(notionalKey)).toLong
 			val tenor = row.get("Day")
 			val order = Order.create(orderType)(direction)(party)(symbol, tenor, price.toString, notional)
-			orderBook = orderBook.addOrder(order)
+			if (order1 == null) order1 = order
+			else order2 = order
 		}
-		orderBook
+		val linkedOrder = LinkedOrder.apply(order1, order2)
+		OrderBook.createImmutable.addOrder(linkedOrder)
 	}
 
 }

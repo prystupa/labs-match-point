@@ -12,16 +12,17 @@ class MatchingEngine(orderBook: OrderBook) {
 	 * Tries to find all matches in a graph using DFS search
 	 * NOTE: This will cross your own orders with no particular preference
 	 * @param matchingAlgorithm - matching algorithm to use
-	 * @param originatingSwap - unit to match
+	 * @param originatingSwap - swap to match
 	 * @return
 	 */
-	def dfsMatch(matchingAlgorithm: MatchingAlgorithm, originatingSwap: MatchingUnit): MatchingResult = {
-		val bookBySymbol = orderBook.getBySymbol(originatingSwap.order1.instrument.symbol)
-		val matchingChain = MatchingChain.EMPTY_CHAIN.append(originatingSwap)
+	def dfsMatch(matchingAlgorithm: MatchingAlgorithm, originatingSwap: LinkedOrder): MatchingResult = {
+		val bookBySymbol = orderBook.getBySymbol(originatingSwap.instrument.symbol)
+		val originatingMatchingUnit = MatchingUnit.apply(originatingSwap)
+		val matchingChain = MatchingChain.EMPTY_CHAIN.append(originatingMatchingUnit)
 		val matchingResult = new MatchingResult(new util.ArrayList())
 		def dfsMatchHelper(swap: MatchingUnit, matchingChain: MatchingChain) {
 			//If we reached end of chain, add to matching result
-			if (swap.order2 == originatingSwap.order1) {
+			if (matchingAlgorithm.canMatch(swap.order2, originatingMatchingUnit.order2, matchingChain)) {
 				matchingResult.matchingChains.add(matchingChain)
 				//Else do dfs to find match
 			} else {
@@ -38,24 +39,17 @@ class MatchingEngine(orderBook: OrderBook) {
 						val matchingUnit = matchingAlgorithm.createMatch(order2, cpOrder1, Some(swap.notional))
 						//Add to our chain
 						val chainAndTrade = matchingChain.append(matchingUnit)
-						//Find all outgoing orders for this counterparty with later tenor date
-						val counterpartyBook = bookBySymbol.getByParty(cpOrder1.party)
-						//Find all orders for order counterparty which satisfy algorithm
-						for (cpOrder2 <- counterpartyBook.getOrders) {
-							if (matchingAlgorithm.canSwap(cpOrder1, cpOrder2, matchingChain)) {
-								//Create swap
-								val newSwap = matchingAlgorithm.createSwap(cpOrder1, cpOrder2, Some(matchingUnit.notional))
-								//traverse down
-								dfsMatchHelper(newSwap, chainAndTrade.append(newSwap))
-							}
-						}
+						//create new swap
+						val newSwap = MatchingUnit.apply(cpOrder1)
+						//Traverse down
+						dfsMatchHelper(newSwap, chainAndTrade.append(newSwap))
 					}
 				}
 			}
 		}
 		//Call helper
 		//reverse for first order
-		dfsMatchHelper(originatingSwap.flip(), matchingChain)
+		dfsMatchHelper(originatingMatchingUnit, matchingChain)
 		//Return matching result
 		matchingResult
 	}

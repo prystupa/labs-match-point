@@ -13,21 +13,28 @@ import org.scalatest.{BeforeAndAfterEach, FunSuite}
 class OrderBookTest extends FunSuite with BeforeAndAfterEach {
 
 	var book:OrderBook = _
-	var orderA:Order = _
-	var orderB:Order = _
+	var orderA:LinkedOrder = _
+	var orderB:LinkedOrder = _
 
 	override def beforeEach() {
 		val newBook = OrderBook.createImmutable
-		orderA = Order.createActiveBuy("A")("USDEUR", "5D", 5.toString, 10)
-		orderB = Order.createActiveSell("B")("USDCAD", "4D", 5.toString, 10)
+		val orderA1 = Order.createActiveBuy("A")("USDEUR", "5D", 5.toString, 10)
+		val orderA2 = Order.createActiveSell("A")("USDEUR", "6D", 5.toString, 10)
+		orderA = LinkedOrder.apply(orderA1, orderA2)
+		val orderB1 = Order.createActiveSell("B")("USDCAD", "4D", 5.toString, 10)
+		val orderB2 = Order.createActiveBuy("B")("USDCAD", "5D", 5.toString, 10)
+		orderB = LinkedOrder.apply(orderB1, orderB2)
 		book = newBook.addOrder(orderA).addOrder(orderB)
 	}
 
 	test("add order") {
 		val book = OrderBook.createImmutable
-		val order = Order.createActiveBuy("A")("USDEUR", "5D", 5.toString, 10)
+		val orderA1 = Order.createActiveBuy("A")("USDEUR", "5D", 5.toString, 10)
+		val orderA2 = Order.createActiveSell("A")("USDEUR", "6D", 5.toString, 10)
+		val order = LinkedOrder.apply(orderA1, orderA2)
 		val newBook = book.addOrder(order)
 		assert(1 == newBook.getOrders.count(o => o.id == order.id))
+		assert(1 == newBook.getOrders.count(o => o.id == order.linkedOrder.id))
 	}
 	test("filter by party") {
 		val newBook = book.getByParty("A")

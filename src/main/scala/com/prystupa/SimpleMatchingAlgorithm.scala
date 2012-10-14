@@ -34,31 +34,4 @@ class SimpleMatchingAlgorithm extends MatchingAlgorithm {
 		new MatchingUnit(math.min(minOrder, existingNotional), order1, order2)
 	}
 
-	/**
-	 * Creates a swap given two order and notional
-	 * @param order1 - first order
-	 * @param order2 - second order
-	 * @param notional - notional of order
-	 * @return - returns constructed matching unit
-	 */
-	def createSwap(order1: Order, order2: Order, notional: Option[Long]):MatchingUnit = {
-		val minOrder = math.min(order1.notional, order2.notional)
-		val existingNotional = notional.getOrElse(math.min(order1.notional, order2.notional))
-		new MatchingUnit(math.min(minOrder, existingNotional), order1, order2)
-	}
-
-	/**
-	 * Test if two orders can create a swap
-	 * @param order1 - order to check
-	 * @param order2 - order to check
-	 * @param matchingChain represents a chain of orders that have been matched up untils this point
-	 * @return
-	 */
-	def canSwap(order1: Order, order2: Order, matchingChain: MatchingChain):Boolean = {
-		order1.instrument.symbol.equals(order2.instrument.symbol) &&
-		order1.party.equals(order2.party) &&
-		order1.direction == Direction.reverse(order2.direction) &&
-		order1.party.equals(order2.party) &&
-		CalendarUtils.tenorAfter(order2.instrument.tenor, order1.instrument.tenor)
-	}
 }

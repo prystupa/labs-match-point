@@ -23,8 +23,6 @@ class Order(val id:Int, val price: BigDecimal,
             val notional: Long, val direction: Direction,
             val instrument: Instrument, val orderType: OrderType,
             val party: String ) {
-
-
 }
 
 object Order {

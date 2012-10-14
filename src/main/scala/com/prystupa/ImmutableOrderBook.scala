@@ -9,7 +9,7 @@ import collection.mutable.{ArrayBuffer, ListBuffer}
  * Simple implementation of order book,
  * can be improved for performance/thread safety
  */
-class ImmutableOrderBook (val orders:Vector[Order]) extends OrderBook {
+class ImmutableOrderBook (val orders:Vector[LinkedOrder]) extends OrderBook {
 
 	def getBySymbol(symbol: String): OrderBook = {
 		new ImmutableOrderBook(orders.filter(order => order.instrument.symbol.equals(symbol)))
@@ -34,8 +34,8 @@ class ImmutableOrderBook (val orders:Vector[Order]) extends OrderBook {
 
 	def getOrders = { orders }
 
-	def addOrder(order: Order): OrderBook = {
-		new ImmutableOrderBook(orders :+ order)
+	def addOrder(order: LinkedOrder): OrderBook = {
+		new ImmutableOrderBook(orders :+ order :+ order.linkedOrder)
 	}
 
 }

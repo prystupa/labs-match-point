@@ -16,3 +16,9 @@ class MatchingUnit(val notional: Long, val order1: Order, val order2: Order) {
 		new MatchingUnit(notional, order2, order1)
 	}
 }
+
+object MatchingUnit {
+	def apply(linkedOrder: LinkedOrder) : MatchingUnit = {
+		new MatchingUnit(linkedOrder.notional, linkedOrder, linkedOrder.linkedOrder)
+	}
+}

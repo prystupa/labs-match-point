@@ -27,16 +27,6 @@ trait MatchingAlgorithm {
 
 
 	/**
-	 * Test if two orders can create a swap
-	 * @param order1 - order to check
-	 * @param order2 - order to check
-	 * @param matchingChain represents a chain of orders that have been matched up untils this point
-	 * @return
-	 */
-	def canSwap(order1: Order, order2: Order, matchingChain: MatchingChain): Boolean
-
-
-	/**
 	 * Creates a match given two order and notional
 	 * @param order1 - first order
 	 * @param order2 - second order
@@ -46,13 +36,5 @@ trait MatchingAlgorithm {
 	def createMatch(order1: Order, order2: Order, notional: Option[Long]): MatchingUnit
 
 
-	/**
-	 * Creates a swap given two order and notional
-	 * @param order1 - first order
-	 * @param order2 - second order
-	 * @param notional - notional of order
-	 * @return - returns constructed matching unit
-	 */
-	def createSwap(order1: Order, order2: Order, notional: Option[Long]): MatchingUnit
 
 }

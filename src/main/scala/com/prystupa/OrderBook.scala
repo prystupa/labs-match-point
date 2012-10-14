@@ -15,9 +15,9 @@ trait OrderBook {
 
 	def getByDirection(direction: Direction): OrderBook
 
-	def getOrders: Vector[Order]
+	def getOrders: Vector[LinkedOrder]
 
-	def addOrder(order: Order): OrderBook
+	def addOrder(order: LinkedOrder): OrderBook
 
 	def merge(orderBook : OrderBook) : OrderBook
 }

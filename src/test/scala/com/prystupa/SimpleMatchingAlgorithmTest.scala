@@ -26,7 +26,6 @@ class SimpleMatchingAlgorithmTest extends FunSuite with BeforeAndAfterAllFunctio
 
 	beforeAll {
 		simpleMatchingAlgorithm = new SimpleMatchingAlgorithm()
-		val newBook = OrderBook.createImmutable
 		orderA1 = Order.createActiveBuy("A")("USDEUR", "5D", 5.toString, 7)
 		orderA2 = Order.createActiveBuy("A")("USDEUR", "3D", 1.toString, 7)
 		orderA3 = Order.createActiveBuy("A")("USDEUR", "5D", 4.toString, 7)
@@ -37,9 +36,7 @@ class SimpleMatchingAlgorithmTest extends FunSuite with BeforeAndAfterAllFunctio
 		orderB2 = Order.createActiveSell("B")("USDEUR", "5D", 5.toString, 10)
 		orderB3 = Order.createActiveBuy("B")("USDEUR", "5D", 5.toString, 7)
 
-		book = newBook.addOrder(orderA1).addOrder(orderB1)
-		originalSwap = simpleMatchingAlgorithm.createSwap(orderB1, orderB2, Some(10))
-		matchingChain =  MatchingChain.EMPTY_CHAIN.append(originalSwap)
+		matchingChain =  MatchingChain.EMPTY_CHAIN
 	}
 
 	test("can match on instrument, price") {
@@ -62,35 +59,11 @@ class SimpleMatchingAlgorithmTest extends FunSuite with BeforeAndAfterAllFunctio
 		assert(!simpleMatchingAlgorithm.canMatch(orderB2, orderB3, matchingChain))
 	}
 
-	test("can swap same party, older tenor, different sides same instrument") {
-		assert(simpleMatchingAlgorithm.canSwap(orderA2, orderA4, matchingChain))
-	}
-
-	test("can't swap same direction") {
-		assert(!simpleMatchingAlgorithm.canSwap(orderA2, orderA3, matchingChain))
-	}
-
-	test("can't swap older for younger tenor") {
-		assert(!simpleMatchingAlgorithm.canSwap(orderA4, orderA2, matchingChain))
-	}
-
-	test("can't swap differnt counterparty") {
-		assert(!simpleMatchingAlgorithm.canSwap(orderA2, orderB2, matchingChain))
-	}
-
-	test("can't swap differnt instrument") {
-		assert(!simpleMatchingAlgorithm.canSwap(orderA2, orderA5, matchingChain))
-	}
-
 	test("create match uses lowest notional") {
 		assert(simpleMatchingAlgorithm.createMatch(orderB2, orderA1, None).notional == 7)
 		assert(simpleMatchingAlgorithm.createMatch(orderB2, orderA1, Some(3)).notional == 3)
 	}
 
-	test("create swap uses lowest notional") {
-		assert(simpleMatchingAlgorithm.createSwap(orderA2, orderA4, None).notional == 7)
-		assert(simpleMatchingAlgorithm.createSwap(orderA2, orderA4, Some(3)).notional == 3)
-	}
 
 
 
