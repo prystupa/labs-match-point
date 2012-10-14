@@ -18,7 +18,7 @@ class LinkedOrder private (o:Order)
 }
 
 object LinkedOrder {
-	def apply(order1:Order, order2:Order):LinkedOrder = {
+	def link(order1:Order, order2:Order):LinkedOrder = {
 		require(canLink(order1, order2))
 		val linkedOrder1 = new LinkedOrder(order1)
 		val linkedOrder2 = new LinkedOrder(order2)
