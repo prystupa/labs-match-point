@@ -14,8 +14,13 @@ class MatchingEngine(orderBook: OrderBook) {
 	def createMatch(): mutable.Map[Int, MatchingResult] = {
 		val activeBook = orderBook.getByOrderType(OrderType.ACTIVE)
 		val ret = mutable.HashMap.empty[Int, MatchingResult]
+		val linkedOrderSet = mutable.HashSet.empty[Int]
 		for (activeOrder <- activeBook.getOrders) {
-			ret.put(activeOrder.id, dfsMatch(matchingAlgorithm, activeOrder))
+			//Add order only we havent added its linked order yet
+			if (!linkedOrderSet.contains(activeOrder.id)) {
+				ret.put(activeOrder.id, dfsMatch(matchingAlgorithm, activeOrder))
+			}
+			linkedOrderSet.add(activeOrder.linkedOrder.id)
 		}
 		ret
 	}
@@ -35,8 +40,8 @@ class MatchingEngine(orderBook: OrderBook) {
 			//If we reached end of chain, add to matching result
 			if (swap.isSame(originatingSwap) && !matchingChain.matchingUnits.isEmpty) {
 				matchingResult.matchingChains.add(matchingChain)
-				//Else do dfs to find match
-			} else {
+			//Only we we are not about to close loop on itself
+			} else if (!matchingChain.containsOrder(swap)) {
 				//Find all matches for a matching unit leg
 				val orderToMatch = swap
 				val bookByTenor = bookBySymbol.getByTenor(orderToMatch.instrument.tenor)
@@ -47,7 +52,8 @@ class MatchingEngine(orderBook: OrderBook) {
 					//If we can match, order with next order
 					if (matchingAlgorithm.canMatch(orderToMatch, cpOrder, matchingChain)) {
 						//We can match, createActive match
-						val matchingUnit = matchingAlgorithm.createMatch(orderToMatch, cpOrder, Some(matchingChain.matchNotional))
+						val existingNotional:Option[Long] = if (matchingChain.matchingUnits.isEmpty) None else Some(matchingChain.matchNotional)
+						val matchingUnit = matchingAlgorithm.createMatch(orderToMatch, cpOrder, existingNotional)
 						//Add to our chain
 						val chainAndMatch = matchingChain.append(matchingUnit)
 						//Traverse down
