@@ -33,7 +33,22 @@ class MatchingServiceSteps {
 
 	@Then("^the following trade suggestions are generated:$")
 	def the_following_trade_suggestions_are_generated(table: DataTable) {
-
+		val expectedMatchingChain = createExpectedMatches(table)
+		val matchingEngine = new MatchingEngine(orderBook)
+		val matches:mutable.Map[Int, MatchingResult] = matchingEngine.createMatch()
+		//2 matches for party  C
+		assert(matches.size == 2)
+		//Find no zero match
+		val nonZeroMatch = matches.find(keyVal => !keyVal._2.isEmpty )
+		assert(nonZeroMatch != None)
+		//Assrt it has only 1 chain
+		assert(nonZeroMatch.get._2.matchingChains.size() == 1)
+		//Get matching chain
+		val matchingChain = nonZeroMatch.get._2.matchingChains.get(0)
+		//Should have 4 matches
+		assert(matchingChain.matchingUnits.size == 3)
+		//Assert that same economics
+		assert(expectedMatchingChain.isSameEconomics(matchingChain))
 	}
 
 	@Given("^market maker \"([^\"]*)\" quoted the following markets:$")

@@ -16,7 +16,7 @@ Feature: Match-point matching logic
       | Day | Bid AMT | Bid | Offer | Offer AMT |
       | 1D  | 7       | 1   |       |           |
       | 3D  |         |     | 3.5   | 10        |
-    Then no trades are generated
+#    Then no trades are generated
 
     When market taker "C" submits the following order:
       | Day | Bid AMT | Bid | Offer | Offer AMT |
