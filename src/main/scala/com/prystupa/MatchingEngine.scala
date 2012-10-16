@@ -52,8 +52,7 @@ class MatchingEngine(orderBook: OrderBook) {
 					//If we can match, order with next order
 					if (matchingAlgorithm.canMatch(orderToMatch, cpOrder, matchingChain)) {
 						//We can match, createActive match
-						val existingNotional:Option[Long] = if (matchingChain.matchingUnits.isEmpty) None else Some(matchingChain.matchNotional)
-						val matchingUnit = matchingAlgorithm.createMatch(orderToMatch, cpOrder, existingNotional)
+						val matchingUnit = matchingAlgorithm.createMatch(orderToMatch, cpOrder)
 						//Add to our chain
 						val chainAndMatch = matchingChain.append(matchingUnit)
 						//Traverse down

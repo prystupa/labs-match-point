@@ -30,10 +30,9 @@ trait MatchingAlgorithm {
 	 * Creates a match given two order and notional
 	 * @param order1 - first order
 	 * @param order2 - second order
-	 * @param notional - notional of order
 	 * @return - returns constructed matching unit
 	 */
-	def createMatch(order1: Order, order2: Order, notional: Option[Long]): MatchingUnit
+	def createMatch(order1: Order, order2: Order): MatchingUnit
 
 
 

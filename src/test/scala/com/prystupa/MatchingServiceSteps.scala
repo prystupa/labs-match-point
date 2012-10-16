@@ -31,8 +31,8 @@ class MatchingServiceSteps {
 		assert(None == nonZeroMatch)
 	}
 
-	@Then("^the following trade suggestions are generated:$")
-	def the_following_trade_suggestions_are_generated(table: DataTable) {
+	@Then("^the following trade chain generated:$")
+	def the_following_trade_chain_generated(table: DataTable) {
 		val expectedMatchingChain = createExpectedMatches(table)
 		val matchingEngine = new MatchingEngine(orderBook)
 		val matches:mutable.Map[Int, MatchingResult] = matchingEngine.createMatch()
@@ -48,6 +48,7 @@ class MatchingServiceSteps {
 		//Should have 4 matches
 		assert(matchingChain.matchingUnits.size == 3)
 		//Assert that same economics
+		assert(expectedMatchingChain.matchNotional == matchingChain.matchNotional)
 		assert(expectedMatchingChain.isSameEconomics(matchingChain))
 	}
 
@@ -62,10 +63,12 @@ class MatchingServiceSteps {
 			val tenor = row.get("Day")
 			val price = row.get("Rate")
 			val buyer = row.get("Buyer")
+			val buyerSize = augmentString(row.get("Buyer Size")).toLong
 			val seller = row.get("Seller")
-			val notional = augmentString(row.get("Size")).toLong
-			val buyOrder = Order.create(null)(Direction.BUY)(buyer)(symbol, tenor, price, notional)
-			val sellOrder = Order.create(null)(Direction.SELL)(seller)(symbol, tenor, price, notional)
+			val sellerSize = augmentString(row.get("Seller Size")).toLong
+			val notional = augmentString(row.get("Match Size")).toLong
+			val buyOrder = Order.create(null)(Direction.BUY)(buyer)(symbol, tenor, price, buyerSize)
+			val sellOrder = Order.create(null)(Direction.SELL)(seller)(symbol, tenor, price, sellerSize)
 			ret = ret.append(new MatchingUnit(notional, buyOrder, sellOrder))
 		}
 		ret

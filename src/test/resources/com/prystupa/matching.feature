@@ -22,8 +22,8 @@ Feature: Match-point matching logic
       | Day | Bid AMT | Bid | Offer | Offer AMT |
       | 1D  | 7       | 1   |       |           |
       | 3D  |         |     | 3     | 10        |
-    Then the following trade suggestions are generated:
-      | Day | Rate | Buyer | Seller | Size |
-      | 1D  | 1    | C     | A      | 7    |
-      | 2D  | 2    | A     | B      | 7    |
-      | 3D  | 3    | B     | C      | 7    |
+    Then the following trade chain generated:
+      | Day | Rate | Buyer | Seller | Buyer Size | Seller Size | Match Size |
+      | 1D  | 1    | C     | A      | 7          | 10          | 7          |
+      | 2D  | 2    | A     | B      | 10         | 10          | 10         |
+      | 3D  | 3    | B     | C      | 10         | 10          | 10         |

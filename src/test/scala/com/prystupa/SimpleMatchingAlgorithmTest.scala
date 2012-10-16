@@ -60,8 +60,7 @@ class SimpleMatchingAlgorithmTest extends FunSuite with BeforeAndAfterAllFunctio
 	}
 
 	test("create match uses lowest notional") {
-		assert(simpleMatchingAlgorithm.createMatch(orderB2, orderA1, None).notional == 7)
-		assert(simpleMatchingAlgorithm.createMatch(orderB2, orderA1, Some(3)).notional == 3)
+		assert(simpleMatchingAlgorithm.createMatch(orderB2, orderA1).notional == 7)
 	}
 
 

@@ -25,13 +25,11 @@ class SimpleMatchingAlgorithm extends MatchingAlgorithm {
 	 * Creates a match given two order and notional
 	 * @param order1 - first order
 	 * @param order2 - second order
-	 * @param notional - notional of order
 	 * @return - returns constructed matching unit
 	 */
-	def createMatch(order1: Order, order2: Order, notional: Option[Long]):MatchingUnit = {
+	def createMatch(order1: Order, order2: Order):MatchingUnit = {
 		val minOrder = math.min(order1.notional, order2.notional)
-		val existingNotional = notional.getOrElse(math.min(order1.notional, order2.notional))
-		new MatchingUnit(math.min(minOrder, existingNotional), order1, order2)
+		new MatchingUnit(minOrder, order1, order2)
 	}
 
 }

@@ -20,7 +20,7 @@ class MatchingChain(val matchingUnits: List[MatchingUnit], val matchNotional: Lo
 	def append(matchingUnit: MatchingUnit): MatchingChain = {
 		val newNotional = matchingUnit.notional
 		val newMatchingUnits = matchingUnit :: matchingUnits
-		new MatchingChain(newMatchingUnits, newNotional)
+		new MatchingChain(newMatchingUnits, math.min(newNotional, matchNotional))
 	}
 
 	/**
@@ -40,10 +40,12 @@ class MatchingChain(val matchingUnits: List[MatchingUnit], val matchNotional: Lo
 	def isSameEconomics(that:MatchingChain):Boolean = {
 		var same:Boolean = true
 		for (unit <- matchingUnits) {
-			same = same && (that.matchingUnits.find(p => p.isSameEconomics(unit)) != None)
+			val matchFound = (that.matchingUnits.find(p => p.isSameEconomics(unit)) != None)
+			same = same && matchFound
 		}
 		for (unit <- that.matchingUnits) {
-			same = same && (matchingUnits.find(p => p.isSameEconomics(unit)) != None)
+			val matchFound = (matchingUnits.find(p => p.isSameEconomics(unit)) != None)
+			same = same && matchFound
 		}
 		same
 	}
